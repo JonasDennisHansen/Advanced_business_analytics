@@ -15,3 +15,14 @@ class LSTMModelPrice(nn.Module):
         out, _ = self.lstm(x)
         out = out[:, -1, :]
         return self.fc(out)
+
+
+def create_sequences(X, hours, seq_len=48, HORIZON=24):
+    X_seq  = []
+
+    for i in range(len(X) - seq_len - HORIZON):
+        if hours[i + seq_len - 1] != 12:
+            continue
+        X_seq.append(X[i:i+seq_len])
+
+    return np.array(X_seq)
